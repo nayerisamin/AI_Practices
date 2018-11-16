@@ -91,27 +91,41 @@ def depthFirstSearch(problem):
 
 
     from util import Stack
-    visitedList = []
-    my_stack = Stack()
-    my_stack.push((problem.getStartState(), []))
-    while not my_stack.isEmpty():
-        (state, toDirection) = my_stack.pop()
+    closed = []
+    fringe = Stack()
+    fringe.push((problem.getStartState(), []))
+    while not fringe.isEmpty():
+        (node, address) = fringe.pop()
 
-        visitedList.append(state)
+        closed.append(node)
 
-        if problem.isGoalState(state):
-            return  toDirection
+        if problem.isGoalState(node):
+            return  address
 
-        for child ,childDirection,cost in problem.getSuccessors(state):
-            if not child in visitedList:
-                my_stack.push((child, toDirection.append(childDirection)))
+        for child ,child_address,cost in problem.getSuccessors(node):
+            if not child in closed:
+                fringe.push((child, address+[child_address]))
 
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    from util import Queue
+    closed = []
+    fringe = Queue()
+    fringe.push((problem.getStartState(), []))
 
+    while not fringe.isEmpty():
+        (node, address) = fringe.pop()
+
+        if (not node in closed):
+            closed.append(node)
+
+            if problem.isGoalState(node):
+                return address
+
+            for child, child_address, cost in problem.getSuccessors(node):
+                fringe.push((child, address + [child_address]))
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
